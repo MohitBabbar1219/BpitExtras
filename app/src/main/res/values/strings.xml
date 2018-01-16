@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">BpitExtracurriculars</string>
+    <string name="open_drawer">Open navigation drawer</string>
+    <string name="close_drawer">Close navigation drawer</string>
+    <string-array name="streams">
+
+        <item>CSE</item>
+        <item>IT</item>
+        <item>ECE</item>
+        <item>EEE</item>
+
+    </string-array>
+</resources>

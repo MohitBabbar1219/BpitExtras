@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/appBackgroundColor"
+    tools:context="com.mydarkappfactory.bpitextracurriculars.SportsMeetRegisterationActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:id="@+id/toolbar_sports_reg"
+        android:background="@color/colorPrimary"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar_sports_reg"
+        android:id="@+id/kjbfdauewpa"
+        android:padding="15dp"
+        android:background="@color/colorPrimary">
+
+        <TextView
+            android:textColor="@color/textColor"
+            android:layout_marginStart="20dp"
+            android:id="@+id/coordinators"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="Coordinators: John Doe(9999847756)\n                         Jane Doe(9999736645)"/>
+
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/kjbfdauewpa">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="20dp">
+
+            <TextView
+                android:id="@+id/cricketMessage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:text="Only boys can participate in cricket. Click submit to register for Cricket team of your stream..."
+                android:textColor="@color/textColor"
+                android:textSize="24sp" />
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:id="@+id/genderLayout"
+                android:layout_below="@id/cricketMessage"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Gender:"
+                    android:id="@+id/iotjrwjbc"
+                    android:textColor="@color/textColor"
+                    android:textSize="24sp"/>
+
+                <RadioGroup
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_below="@id/iotjrwjbc"
+                    android:id="@+id/genderRadioGroup">
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Male"
+                        android:onClick="setGender"
+                        android:id="@+id/radioMale"
+                        android:textColor="@color/textColor"
+                        android:textSize="20sp"/>
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Female"
+                        android:onClick="setGender"
+                        android:id="@+id/radioFemale"
+                        android:textColor="@color/textColor"
+                        android:textSize="20sp"/>
+
+                </RadioGroup>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:id="@+id/maleWeightLayout"
+                android:layout_below="@id/genderLayout"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Weights:"
+                    android:id="@+id/lkmdfslk"
+                    android:textColor="@color/textColor"
+                    android:textSize="24sp"/>
+
+                <RadioGroup
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_below="@id/lkmdfslk"
+                    android:id="@+id/maleWeightRadioGroup">
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="55-65kg"
+                        android:onClick="setWeightMale"
+                        android:id="@+id/wt55to65"
+                        android:textColor="@color/textColor"
+                        android:textSize="20sp"/>
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="65-75kg"
+                        android:onClick="setWeightMale"
+                        android:id="@+id/wt65to75"
+                        android:textColor="@color/textColor"
+                        android:textSize="20sp"/>
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="75+kg"
+                        android:onClick="setWeightMale"
+                        android:id="@+id/wt75plus"
+                        android:textColor="@color/textColor"
+                        android:textSize="20sp"/>
+
+                </RadioGroup>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:id="@+id/femaleWeightLayout"
+                android:layout_below="@id/maleWeightLayout"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Weights:"
+                    android:id="@+id/porwkjiosd"
+                    android:textColor="@color/textColor"
+                    android:textSize="24sp"/>
+
+                <RadioGroup
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_below="@id/porwkjiosd"
+                    android:id="@+id/femaleWeightRadioGroup">
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="60-kg"
+                        android:onClick="setWeightFemale"
+                        android:id="@+id/wtMinus60"
+                        android:textColor="@color/textColor"
+                        android:textSize="20sp"/>
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="60+kg"
+                        android:onClick="setWeightFemale"
+                        android:id="@+id/wtPlus60"
+                        android:textColor="@color/textColor"
+                        android:textSize="20sp"/>
+
+
+                </RadioGroup>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:id="@+id/categoryLayout"
+                android:layout_below="@id/femaleWeightLayout"
+                android:layout_marginTop="10dp"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Category"
+                    android:id="@+id/orjteiofs"
+                    android:textColor="@color/textColor"
+                    android:textSize="24sp"/>
+
+                <RadioGroup
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_below="@id/orjteiofs"
+                    android:id="@+id/categoryRadioGroup">
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Singles"
+                        android:onClick="setCategory"
+                        android:id="@+id/radioSingles"
+                        android:textColor="@color/textColor"
+                        android:textSize="20sp"/>
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Doubles"
+                        android:onClick="setCategory"
+                        android:id="@+id/radioDoubles"
+                        android:textColor="@color/textColor"
+                        android:textSize="20sp"/>
+
+                </RadioGroup>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_below="@id/categoryLayout"
+                android:layout_marginTop="10dp"
+                android:id="@+id/partnerDetails"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:id="@+id/partnerName"
+                    android:textColorHint="@color/logoColor"
+                    android:textColor="@color/textColor"
+                    android:background="@color/toolbarColor"
+                    android:hint="Partner's name..."/>
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_below="@id/partnerName"
+                    android:layout_marginTop="5dp"
+                    android:id="@+id/partnerEnrollment"
+                    android:inputType="number"
+                    android:textColorHint="@color/logoColor"
+                    android:textColor="@color/textColor"
+                    android:background="@color/toolbarColor"
+                    android:hint="Partner's enrollment number..."/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/partnerEnrollment"
+                    android:textColor="@color/textColor"
+                    android:text="*Your partner should be of the same stream as you and he does not need to register again."/>
+
+            </RelativeLayout>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:textColor="@color/statusBarColor"
+                android:text="Submit"
+                android:onClick="attemptRegister"
+                android:id="@+id/sportsRegFormSubmitButton"
+                android:layout_below="@id/partnerDetails"
+                android:background="@color/logoColor"
+                android:layout_marginTop="10dp"
+                />
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+
+
+</RelativeLayout>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#354149</color>
+    <color name="colorPrimaryDark">#2a343b</color>
+    <color name="colorAccent">#96AAB7</color>
+    <color name="statusBarColor">#2a343b</color>
+    <color name="toolbarColor">#354149</color>
+    <color name="appBackgroundColor">#3c4b54</color>
+    <color name="logoColor">#96AAB7</color>
+    <color name="textColor">#b3d6ed</color>
+    <color name="cardColor">#4c5f6b</color>
+    <color name="requestedCard">#52744c</color>
+    <color name="acceptedCard">#6b4c4d</color>
+</resources>

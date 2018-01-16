@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/appBackgroundColor"
+    tools:context="com.mydarkappfactory.bpitextracurriculars.SocietyFormActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:id="@+id/toolbar_soc_form"
+        android:background="@color/colorPrimary"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_below="@id/toolbar_soc_form"
+        android:padding="20dp"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/society_question"
+            android:inputType="textMultiLine"
+            android:textColorHint="@color/logoColor"
+            android:textColor="@color/textColor"
+            android:background="@color/toolbarColor"
+            android:gravity="top|left"
+            android:hint="Why do you want to join our scoiety?"
+            android:maxLines="15"
+            android:minLines="15" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Submit"
+            android:textColorHint="@color/logoColor"
+            android:id="@+id/society_question_submit"
+            android:textColor="@color/statusBarColor"
+            android:onClick="submitAnswer"
+            android:layout_marginTop="10dp"
+            android:layout_below="@id/society_question"
+            android:background="@color/logoColor"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>

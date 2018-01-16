@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/appBackgroundColor"
+    tools:context="com.mydarkappfactory.bpitextracurriculars.CategoryListActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:id="@+id/fragmentLayout"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:id="@+id/toolbar_soc_list"
+            android:background="@color/colorPrimary"
+            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+        <android.support.design.widget.TabLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tablayout_id"
+            android:layout_below="@id/toolbar_soc_list"
+            android:background="@color/toolbarColor"
+            app:tabMode="fixed"
+            app:tabTextColor="@color/logoColor"
+            app:tabSelectedTextColor="@color/textColor"
+            app:tabGravity="fill" />
+
+        <android.support.v4.view.ViewPager
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/viewpager_soc_list"
+            android:layout_below="@id/tablayout_id" />
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

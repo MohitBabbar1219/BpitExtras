@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/appBackgroundColor"
+    tools:context="com.mydarkappfactory.bpitextracurriculars.EquipmentsActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:id="@+id/toolbar_equipment"
+        android:background="@color/colorPrimary"
+        android:layout_marginBottom="5dp"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_margin="5dp"
+        android:onClick="vellaToast"
+        android:id="@+id/football_card"
+        android:layout_below="@id/toolbar_equipment"
+        android:layout_height="110dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:background="@color/cardColor"
+            android:id="@+id/football_layout"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_width="100dp"
+                android:src="@drawable/football"
+                android:layout_margin="5dp"
+                android:id="@+id/football_img"
+                android:layout_height="100dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/football_img"
+                android:textSize="28sp"
+                android:id="@+id/football_text"
+                android:textColor="@color/textColor"
+                android:layout_margin="5dp"
+                android:text="Football" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="20dp"
+                android:textSize="20sp"
+                android:visibility="invisible"
+                android:id="@+id/football_text_accepted"
+                android:textColor="@color/textColor"
+                android:layout_toEndOf="@id/football_img"
+                android:layout_below="@id/football_text"
+                android:text="Request Accepted"
+                android:padding="10dp"/>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="20dp"
+                android:padding="10dp"
+                android:id="@+id/football_butt"
+                android:onClick="requestFootball"
+                android:background="@color/logoColor"
+                android:textColor="@color/statusBarColor"
+                android:text="request football"
+                android:layout_below="@id/football_text"
+                android:layout_toEndOf="@id/football_img"/>
+
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_margin="5dp"
+        android:onClick="vellaToast"
+        android:id="@+id/basketball_card"
+        android:layout_below="@id/football_card"
+        android:layout_height="110dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:background="@color/cardColor"
+            android:id="@+id/basketball_layout"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_width="100dp"
+                android:src="@drawable/basketball"
+                android:layout_margin="5dp"
+                android:id="@+id/basketball_img"
+                android:layout_height="100dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/basketball_img"
+                android:textSize="28sp"
+                android:id="@+id/basketball_text"
+                android:textColor="@color/textColor"
+                android:layout_margin="5dp"
+                android:text="Basketball" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="20dp"
+                android:textSize="20sp"
+                android:visibility="invisible"
+                android:id="@+id/basketball_text_accepted"
+                android:textColor="@color/textColor"
+                android:layout_toEndOf="@id/basketball_img"
+                android:layout_below="@id/basketball_text"
+                android:text="Request Accepted"
+                android:padding="10dp"/>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="20dp"
+                android:padding="10dp"
+                android:id="@+id/basketball_butt"
+                android:onClick="requestBasketball"
+                android:background="@color/logoColor"
+                android:textColor="@color/statusBarColor"
+                android:text="request basketball"
+                android:layout_below="@id/basketball_text"
+                android:layout_toEndOf="@id/basketball_img"/>
+
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_margin="5dp"
+        android:id="@+id/volleyball_card"
+        android:onClick="vellaToast"
+        android:layout_below="@id/basketball_card"
+        android:layout_height="110dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:id="@+id/volleyball_layout"
+            android:background="@color/cardColor"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_width="100dp"
+                android:src="@drawable/volleyball"
+                android:layout_margin="5dp"
+                android:id="@+id/volleyball_img"
+                android:layout_height="100dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/volleyball_img"
+                android:textSize="28sp"
+                android:id="@+id/volleyball_text"
+                android:textColor="@color/textColor"
+                android:layout_margin="5dp"
+                android:text="volleyball" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="20dp"
+                android:textSize="20sp"
+                android:visibility="invisible"
+                android:id="@+id/volleyball_text_accepted"
+                android:textColor="@color/textColor"
+                android:layout_toEndOf="@id/volleyball_img"
+                android:layout_below="@id/volleyball_text"
+                android:text="Request Accepted"
+                android:padding="10dp"/>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="20dp"
+                android:padding="10dp"
+                android:id="@+id/volleyball_butt"
+                android:onClick="requestVolleyball"
+                android:background="@color/logoColor"
+                android:textColor="@color/statusBarColor"
+                android:text="request volleyball"
+                android:layout_below="@id/volleyball_text"
+                android:layout_toEndOf="@id/volleyball_img"/>
+
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+</RelativeLayout>
