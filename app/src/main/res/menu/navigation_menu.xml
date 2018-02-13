@@ -3,10 +3,10 @@
 
     <group android:checkableBehavior="single">
 
-        <item
-            android:title="Home"
-            android:id="@+id/home_id"
-            android:icon="@drawable/home_icon" />
+        <!--<item-->
+            <!--android:title="Home"-->
+            <!--android:id="@+id/home_id"-->
+            <!--android:icon="@drawable/home_icon" />-->
 
         <!--<item-->
             <!--android:title="Pending Orders"-->
@@ -19,9 +19,14 @@
             android:icon="@drawable/events" />
 
         <item
+            android:title="Notice Board"
+            android:id="@+id/notice_id"
+            android:icon="@drawable/notice" />
+
+        <item
             android:title="Sports Room"
             android:id="@+id/sportsroom_id"
-            android:icon="@drawable/bill_icon" />
+            android:icon="@drawable/sports_room" />
 
     </group>
 
@@ -30,15 +35,9 @@
         <menu>
 
             <item
-                android:title="Sign in"
-                android:id="@+id/signin_id"
-                android:icon="@drawable/login" />
-
-            <item
-                android:title="Sign out"
-                android:id="@+id/signout_id"
-                android:visible="false"
-                android:icon="@drawable/logout_icon" />
+                android:title="Account Settings"
+                android:id="@+id/accountSettings"
+                android:icon="@drawable/account_settings" />
 
         </menu>
 

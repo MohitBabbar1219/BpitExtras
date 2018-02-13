@@ -67,7 +67,7 @@
                 android:id="@+id/society_desc"
                 android:textColor="@color/textColor"
                 android:text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry."
-                android:textSize="16sp"/>
+                android:textSize="20sp"/>
 
         </RelativeLayout>
 

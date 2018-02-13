@@ -67,66 +67,129 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(this, "Login in progress...", Toast.LENGTH_SHORT).show();
         }
 
+        DatabaseReference emailObj = firebaseDb.child(FirebaseModel.Users.USERS).child(email.substring(0, email.indexOf('.')));
+        emailObj.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.child("password").getValue(String.class).equals(password)) {
 
-        mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        Log.d("Bpit", "Sign in status: " + task.isSuccessful());
-                        if (!task.isSuccessful()) {
-                            Log.d("Bpit", task.getException().toString());
-                        } else {
+                    ContentValues recordValues = new ContentValues();
+                    recordValues.put("EMAIL", email);
+                    recordValues.put("PASSWORD", password);
+                    db.update("EMAIL_PASSWORD", recordValues, "_id = ?", new String[]{"1"});
 
-                            ContentValues recordValues = new ContentValues();
-                            recordValues.put("EMAIL", email);
-                            recordValues.put("PASSWORD", password);
-                            db.update("EMAIL_PASSWORD", recordValues, "_id = ?", new String[]{"1"});
-
-                            firebaseDb.child(FirebaseModel.Users.USERS).child(email.substring(0, email.indexOf('.'))).child(FirebaseModel.Users.IS_FIRST_LOGIN).addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    try {
-                                        boolean isFirstLogin = dataSnapshot.getValue(Boolean.class);
-                                        if (dataSnapshot.getValue(Boolean.class) != null) {
-                                            if (isFirstLogin) {
-                                                Log.d("Bpit", "MainActivity logged in first time");
-                                                ContentValues recValues = new ContentValues();
-                                                recValues.put("ANSWER", 0);
-                                                db.update("IS_LOGGED_IN", recValues, "_id = 1", null);
-                                                Intent intent = new Intent(LoginActivity.this, FirstLoginActivity.class);
-                                                startActivity(intent);
-                                                finish();
-                                            } else {
-                                                Log.d("Bpit", "MainActivity logged in multiple times");
-                                                ContentValues recValues = new ContentValues();
-                                                recValues.put("ANSWER", 1);
-                                                db.update("IS_LOGGED_IN", recValues, "_id = 1", null);
-                                                finish();
-
-                                            }
-                                        }
-                                    } catch (Exception e) {
-                                        firebaseDb.child(FirebaseModel.Users.USERS).child(email.substring(0, email.indexOf('.'))).child(FirebaseModel.Users.IS_FIRST_LOGIN).setValue(true);
+                    firebaseDb.child(FirebaseModel.Users.USERS).child(email.substring(0, email.indexOf('.'))).child(FirebaseModel.Users.IS_FIRST_LOGIN).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            try {
+                                boolean isFirstLogin = dataSnapshot.getValue(Boolean.class);
+                                if (dataSnapshot.getValue(Boolean.class) != null) {
+                                    if (isFirstLogin) {
                                         Log.d("Bpit", "MainActivity logged in first time");
                                         ContentValues recValues = new ContentValues();
                                         recValues.put("ANSWER", 0);
                                         db.update("IS_LOGGED_IN", recValues, "_id = 1", null);
-
                                         Intent intent = new Intent(LoginActivity.this, FirstLoginActivity.class);
                                         startActivity(intent);
                                         finish();
+                                    } else {
+                                        Log.d("Bpit", "MainActivity logged in multiple times");
+                                        ContentValues recValues = new ContentValues();
+                                        recValues.put("ANSWER", 1);
+                                        db.update("IS_LOGGED_IN", recValues, "_id = 1", null);
+                                        finish();
+
                                     }
                                 }
+                            } catch (Exception e) {
+                                firebaseDb.child(FirebaseModel.Users.USERS).child(email.substring(0, email.indexOf('.'))).child(FirebaseModel.Users.IS_FIRST_LOGIN).setValue(true);
+                                Log.d("Bpit", "MainActivity logged in first time");
+                                ContentValues recValues = new ContentValues();
+                                recValues.put("ANSWER", 0);
+                                db.update("IS_LOGGED_IN", recValues, "_id = 1", null);
 
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
+                                Intent intent = new Intent(LoginActivity.this, FirstLoginActivity.class);
+                                startActivity(intent);
+                                finish();
+                            }
+                        }
 
-                                }
-                            });
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
 
                         }
-                    }
-                });
+                    });
+                } else {
+                    Toast.makeText(LoginActivity.this, "Enrollment number or password is incorrect", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+//        mAuth.signInWithEmailAndPassword(email, password)
+//                .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<AuthResult> task) {
+//                        Log.d("Bpit", "Sign in status: " + task.isSuccessful());
+//                        if (!task.isSuccessful()) {
+//                            Log.d("Bpit", task.getException().toString());
+//                        } else {
+//
+//                            ContentValues recordValues = new ContentValues();
+//                            recordValues.put("EMAIL", email);
+//                            recordValues.put("PASSWORD", password);
+//                            db.update("EMAIL_PASSWORD", recordValues, "_id = ?", new String[]{"1"});
+//
+//                            firebaseDb.child(FirebaseModel.Users.USERS).child(email.substring(0, email.indexOf('.'))).child(FirebaseModel.Users.IS_FIRST_LOGIN).addListenerForSingleValueEvent(new ValueEventListener() {
+//                                @Override
+//                                public void onDataChange(DataSnapshot dataSnapshot) {
+//                                    try {
+//                                        boolean isFirstLogin = dataSnapshot.getValue(Boolean.class);
+//                                        if (dataSnapshot.getValue(Boolean.class) != null) {
+//                                            if (isFirstLogin) {
+//                                                Log.d("Bpit", "MainActivity logged in first time");
+//                                                ContentValues recValues = new ContentValues();
+//                                                recValues.put("ANSWER", 0);
+//                                                db.update("IS_LOGGED_IN", recValues, "_id = 1", null);
+//                                                Intent intent = new Intent(LoginActivity.this, FirstLoginActivity.class);
+//                                                startActivity(intent);
+//                                                finish();
+//                                            } else {
+//                                                Log.d("Bpit", "MainActivity logged in multiple times");
+//                                                ContentValues recValues = new ContentValues();
+//                                                recValues.put("ANSWER", 1);
+//                                                db.update("IS_LOGGED_IN", recValues, "_id = 1", null);
+//                                                finish();
+//
+//                                            }
+//                                        }
+//                                    } catch (Exception e) {
+//                                        firebaseDb.child(FirebaseModel.Users.USERS).child(email.substring(0, email.indexOf('.'))).child(FirebaseModel.Users.IS_FIRST_LOGIN).setValue(true);
+//                                        Log.d("Bpit", "MainActivity logged in first time");
+//                                        ContentValues recValues = new ContentValues();
+//                                        recValues.put("ANSWER", 0);
+//                                        db.update("IS_LOGGED_IN", recValues, "_id = 1", null);
+//
+//                                        Intent intent = new Intent(LoginActivity.this, FirstLoginActivity.class);
+//                                        startActivity(intent);
+//                                        finish();
+//                                    }
+//                                }
+//
+//                                @Override
+//                                public void onCancelled(DatabaseError databaseError) {
+//
+//                                }
+//                            });
+//
+//                        }
+//                    }
+//                });
     }
 
 

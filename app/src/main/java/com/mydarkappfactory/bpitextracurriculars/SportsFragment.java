@@ -84,7 +84,11 @@ public class SportsFragment extends Fragment {
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        firstDialog.show();
+                        try {
+                            firstDialog.show();
+                        } catch (Exception e) {
+                            Log.d("Bpit", "loading");
+                        }
                         GenericTypeIndicator<ArrayList<String>> t = new GenericTypeIndicator<ArrayList<String>>() {};
                         ArrayList<String> register = dataSnapshot.getValue(t);
                         for (String reg: register) {
@@ -94,10 +98,24 @@ public class SportsFragment extends Fragment {
                         while (i < x.size()) {
                             boolean isRemoved = false;
                             for (String p: invalidEvents) {
-                                if (x.get(i).getName().equals(p)) {
-                                    x.remove(i);
-                                    isRemoved = true;
-                                    break;
+                                if (x.get(i).getCategory().equals("BG") || x.get(i).getCategory().equals("BwtGwt") || x.get(i).getCategory().equals("G")) {
+                                    if (x.get(i).getName().equals(p)) {
+                                        x.remove(i);
+                                        isRemoved = true;
+                                        break;
+                                    }
+                                } else if (x.get(i).getCategory().equals("BdistGdist")) {
+                                    if ((x.get(i).getName() + "100200").equals(p)) {
+                                        x.remove(i);
+                                        isRemoved = true;
+                                        break;
+                                    }
+                                } else {
+                                    if ((x.get(i).getName() + "SD").equals(p)) {
+                                        x.remove(i);
+                                        isRemoved = true;
+                                        break;
+                                    }
                                 }
                             }
                             if (!isRemoved) {
@@ -154,19 +172,22 @@ public class SportsFragment extends Fragment {
     }
 
     public void addInArrayList(ArrayList<Society> x) {
-        x.add(new Society("Football", Society.LOREM_IPSUM, R.drawable.ic_launcher_background, Society.SPORTS.BG, "Coord1", "Coord2")); //B G
-        x.add(new Society("Basketball", Society.LOREM_IPSUM, R.drawable.ic_launcher_background, Society.SPORTS.BG, "Coord1", "Coord2")); //B G
-        x.add(new Society("Volleyball", Society.LOREM_IPSUM, R.drawable.ic_launcher_background, Society.SPORTS.BG, "Coord1", "Coord2")); //B G
-        x.add(new Society("Chess", Society.LOREM_IPSUM, R.drawable.ic_launcher_background, Society.SPORTS.BG, "Coord1", "Coord2")); //B G
-        x.add(new Society("Shot put", Society.LOREM_IPSUM, R.drawable.ic_launcher_background, Society.SPORTS.BG, "Coord1", "Coord2")); //B G
-        x.add(new Society("Throw ball", Society.LOREM_IPSUM, R.drawable.ic_launcher_background, Society.SPORTS.BG, "Coord1", "Coord2")); //B G
-        x.add(new Society("Discuss throw", Society.LOREM_IPSUM, R.drawable.ic_launcher_background, Society.SPORTS.BG, "Coord1", "Coord2")); //B G
-        x.add(new Society("Long jump", Society.LOREM_IPSUM, R.drawable.ic_launcher_background, Society.SPORTS.BG, "Coord1", "Coord2")); //B G
-        x.add(new Society("Carrom", Society.LOREM_IPSUM, R.drawable.ic_launcher_background, Society.SPORTS.BGSD, "Coord1", "Coord2")); //B G S D
-        x.add(new Society("Badminton", Society.LOREM_IPSUM, R.drawable.ic_launcher_background, Society.SPORTS.BGSD, "Coord1", "Coord2")); //B G S D
-        x.add(new Society("Table tennis", Society.LOREM_IPSUM, R.drawable.ic_launcher_background, Society.SPORTS.BGSD, "Coord1", "Coord2")); //B G S D
-        x.add(new Society("Arm wrestling", Society.LOREM_IPSUM, R.drawable.ic_launcher_background, Society.SPORTS.BwtGwt, "Coord1", "Coord2")); //B 55-65 65-75 75+ G 60- 60+
-        x.add(new Society("Cricket", Society.LOREM_IPSUM, R.drawable.ic_launcher_background, Society.SPORTS.B, "Coord1", "Coord2"));
+        x.add(new Society("Football", "Register here for a spot in the football team of your stream.", R.drawable.football_reg, Society.SPORTS.BG, "Coord1", "Coord2")); //B G
+        x.add(new Society("Basketball", "Register here for a spot in the basketball team of your stream.", R.drawable.basketball_reg, Society.SPORTS.BG, "Coord1", "Coord2")); //B G
+        x.add(new Society("Volleyball", "Register here for a spot in the volleyball team of your stream.", R.drawable.volleyball_reg, Society.SPORTS.BG, "Coord1", "Coord2")); //B G
+        x.add(new Society("Chess", "Register here to play chess at the BPIT Sports Meet 2k18", R.drawable.chess, Society.SPORTS.BG, "Coord1", "Coord2")); //B G
+        x.add(new Society("Shot put", "Register here to play Shot Put at the BPIT Sports Meet 2k18", R.drawable.shot_put, Society.SPORTS.BG, "Coord1", "Coord2")); //B G
+        x.add(new Society("Throw ball", "Register here to play Throw ball at the BPIT Sports Meet 2k18", R.drawable.throw_ball, Society.SPORTS.G, "Coord1", "Coord2")); //G
+        x.add(new Society("Discuss throw", "Register here to play Discuss Throw at the BPIT Sports Meet 2k18", R.drawable.discus_throw, Society.SPORTS.BG, "Coord1", "Coord2")); //B G
+        x.add(new Society("Long jump", "Register here to play Long Jump at the BPIT Sports Meet 2k18", R.drawable.long_jump, Society.SPORTS.BG, "Coord1", "Coord2")); //B G
+        x.add(new Society("Carrom", "Register here to play Carrom at the BPIT Sports Meet 2k18", R.drawable.carrom, Society.SPORTS.BGSD, "Coord1", "Coord2")); //B G S D
+        x.add(new Society("Badminton", "Register here to play Badminton at the BPIT Sports Meet 2k18", R.drawable.badminton, Society.SPORTS.BGSD, "Coord1", "Coord2")); //B G S D
+        x.add(new Society("Table tennis", "Register here to play Table Tennis at the BPIT Sports Meet 2k18", R.drawable.table_tennis, Society.SPORTS.BGSD, "Coord1", "Coord2")); //B G S D
+        x.add(new Society("Arm wrestling", "Register here to play Arm Wrestling at the BPIT Sports Meet 2k18", R.drawable.arm_wrestling, Society.SPORTS.BwtGwt, "Coord1", "Coord2")); //B 55-65 65-75 75+ G 60- 60+
+        x.add(new Society("Athletics", "Register here to take part in athletics at the BPIT Sports Meet 2k18", R.drawable.athletics, Society.SPORTS.BdistGdist, "Coord1", "Coord2"));
+//        x.add(new Society("Cricket", "Register here for a spot in the cricket team of your stream.", R.drawable.cricket, Society.SPORTS.B, "Coord1", "Coord2"));
+
+
 
     }
 

@@ -39,6 +39,7 @@ public class FirebaseModel {
         public static final String SPORTS_MEET_TABLE = "Sports Meet",
                 REGISTRATIONS = "Registrations",
                 EVENTS = "Events",
+                COORDINATORS = "Coordinators",
                 SCHEDULE = "Schedule";
     }
 

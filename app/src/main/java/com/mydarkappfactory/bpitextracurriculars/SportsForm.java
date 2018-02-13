@@ -1,11 +1,14 @@
 package com.mydarkappfactory.bpitextracurriculars;
 
+import java.util.ArrayList;
+
 /**
  * Created by dragonslayer on 23/12/17.
  */
 
 public class SportsForm {
-    private String gender, category, partnerName, partnerEnrollment;
+    private String gender, partnerName, partnerEnrollment;
+    private String category;
 
     public SportsForm(String gender, String category, String partnerName, String partnerEnrollment) {
         this.gender = gender;

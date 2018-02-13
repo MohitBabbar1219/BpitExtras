@@ -1,6 +1,7 @@
 package com.mydarkappfactory.bpitextracurriculars;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,8 +15,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,18 +29,23 @@ import java.util.Set;
 public class SportsMeetRegisterationActivity extends AppCompatActivity {
 
     android.support.v7.widget.Toolbar toolbar;
+    TextView coordinatorsTextView;
+    DatabaseReference firebaseDb;
+    ProgressDialog firstDialog;
     TextView coordinators, cricketText;
-    RadioGroup genderGroup, categoryGroup, maleWeightGroup, femaleWeightGroup;
+    RadioGroup genderGroup, distanceGroup, categoryGroup, maleWeightGroup, femaleWeightGroup;
     Button submitButt;
-//    RadioButton maleRadio, femaleRadio, singlesRadio, doublesRadio;
+    //    RadioButton maleRadio, femaleRadio, singlesRadio, doublesRadio;
     EditText partnerName, partnerEnrollment;
-    RelativeLayout genderLayout, categoryLayout, partnerDetailsLayout, maleWeightLayout, femaleWeightLayout;
+    RelativeLayout genderLayout, distanceLayout, categoryLayout, partnerDetailsLayout, maleWeightLayout, femaleWeightLayout;
     boolean isCricket, isArmWrestling, isSingleDouble;
     String category = null, gender = null, partnerNameTxt = null, partnerEnrollmentText = null;
-    DatabaseReference firebaseDb;
     Society society;
     String email;
     ArrayList<String> invalidEvents;
+    String regCat;
+    String eventCat;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,23 +55,60 @@ public class SportsMeetRegisterationActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar_sports_reg);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Registration");
 
+
+        coordinatorsTextView = findViewById(R.id.coordinators);
         firebaseDb = FirebaseDatabase.getInstance().getReference();
+
+        Gson gson = new Gson();
+
+        Intent getIntent = getIntent();
+
+        society = gson.fromJson(getIntent.getStringExtra("Event"), Society.class);
+        getSupportActionBar().setTitle(society.getName() + " Registration");
+        firstDialog = new ProgressDialog(this, R.style.ProgressDialogTheme);
+
+        firstDialog.setTitle("Loading");
+        firstDialog.setMessage("Downloading content, please wait...");
+        firstDialog.setCanceledOnTouchOutside(false);
+        firstDialog.setCancelable(false);
+        firstDialog.show();
+        email = getIntent.getStringExtra("Email");
 
         invalidEvents = getIntent().getStringArrayListExtra("InvalidEvents");
 
         invalidEvents = removeDuplicates(invalidEvents);
+        Log.d("Bpit", "invalid events " + invalidEvents.toString());
+        eventCat = society.getCategory();
+        if (eventCat.equals("BGSD")) {
+            if (invalidEvents.contains(society.getName() + "S")) {
+                regCat = "Singles";
+            } else if (invalidEvents.contains(society.getName() + "D")) {
+                regCat = "Doubles";
+            } else {
+                regCat = "null";
+            }
+        } else if (eventCat.equals("BdistGdist")) {
+            if (invalidEvents.contains(society.getName() + "100")) {
+                regCat = "100";
+            } else if (invalidEvents.contains(society.getName() + "200")) {
+                regCat = "200";
+            } else {
+                regCat = "null";
+            }
+        }
+        Log.d("Bpit", "regCat: " + regCat);
 
-        society = new Society(getIntent().getStringExtra("Event"));
-        email = getIntent().getStringExtra("Email");
+        setCoordinators(society.getName());
 
         submitButt = findViewById(R.id.sportsRegFormSubmitButton);
         genderLayout = findViewById(R.id.genderLayout);
+        distanceLayout = findViewById(R.id.distanceLayout);
         partnerDetailsLayout = findViewById(R.id.partnerDetails);
         categoryLayout = findViewById(R.id.categoryLayout);
-        cricketText = findViewById(R.id.cricketMessage);
+        cricketText = findViewById(R.id.throwBallMessage);
         coordinators = findViewById(R.id.coordinators);
+        distanceGroup = findViewById(R.id.distanceGroup);
         genderGroup = findViewById(R.id.genderRadioGroup);
         categoryGroup = findViewById(R.id.categoryRadioGroup);
         partnerName = findViewById(R.id.partnerName);
@@ -71,18 +118,23 @@ public class SportsMeetRegisterationActivity extends AppCompatActivity {
         maleWeightGroup = findViewById(R.id.maleWeightRadioGroup);
         femaleWeightGroup = findViewById(R.id.femaleWeightRadioGroup);
 
-        if (society.getName().equals("Cricket")) {
+        if (this.society.getName().equals("Throw ball")) {
             clearUI();
             cricketText.setVisibility(View.VISIBLE);
             isCricket = true;
-        } else if (society.getName().equals("Arm wrestling")) {
+        } else if (this.society.getName().equals("Arm wrestling")) {
             clearUI();
             genderLayout.setVisibility(View.VISIBLE);
             isArmWrestling = true;
-        } else {
+        } else if (this.society.getName().equals("Athletics")) {
             clearUI();
             genderLayout.setVisibility(View.VISIBLE);
-            if (society.getCategory().equals(Society.SPORTS.BGSD)) {
+            distanceLayout.setVisibility(View.VISIBLE);
+        }
+        else {
+            clearUI();
+            genderLayout.setVisibility(View.VISIBLE);
+            if (this.society.getCategory().equals(Society.SPORTS.BGSD)) {
                 categoryLayout.setVisibility(View.VISIBLE);
                 isSingleDouble = true;
             } else {
@@ -93,6 +145,48 @@ public class SportsMeetRegisterationActivity extends AppCompatActivity {
 
         partnerDetailsLayout.setVisibility(View.GONE);
 
+    }
+
+
+
+    public void setCoordinators(String eventName) {
+        DatabaseReference dbref = firebaseDb.child(FirebaseModel.SPORTS_MEET.SPORTS_MEET_TABLE).child(FirebaseModel.SPORTS_MEET.EVENTS).child(FirebaseModel.SPORTS_MEET.COORDINATORS).child(eventName);
+        dbref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                StringBuilder coordinators = new StringBuilder("");
+                for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
+                    coordinators.append(snapshot.getKey() + ": " + snapshot.getValue(String.class) + "\n");
+                }
+                coordinatorsTextView.setText(coordinators.toString());
+                firstDialog.cancel();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+
+    public ArrayList<String> removeDuplicates(ArrayList<String> x) {
+        HashMap<String, Integer> duplicateRemoval = new HashMap<>();
+        for (String y: x) {
+            duplicateRemoval.put(y, 0);
+        }
+        ArrayList<String> z = new ArrayList<>();
+        Log.d("Bpit", "duprem " + duplicateRemoval.keySet().toString());
+        for (String y: duplicateRemoval.keySet()) {
+            if (y != null && !y.equals("-1")) {
+                Log.d("Bpit", "kjdsnsa");
+                z.add(y);
+            }
+        }
+        z.add(0, "-1");
+        Log.d("Bpit", x.toString());
+        Log.d("Bpit", z.toString());
+        return z;
     }
 
     public void setWeightMale(View view) {
@@ -119,6 +213,33 @@ public class SportsMeetRegisterationActivity extends AppCompatActivity {
                 break;
             case R.id.wtMinus60:
                 category = Society.SPORTS_CATEGORIES.SIXTY_MINUS;
+                break;
+
+        }
+    }
+
+    public void setDistance(View view) {
+        int id = distanceGroup.getCheckedRadioButtonId();
+        switch (id) {
+            case R.id.hundredMeter:
+                if (regCat.equals("100")) {
+                    Toast.makeText(this, "You are already registered for 100m.", Toast.LENGTH_SHORT).show();
+                    RadioButton singleButton = findViewById(R.id.hundredMeter);
+                    singleButton.setChecked(false);
+                    category = null;
+                } else {
+                    category = Society.SPORTS_CATEGORIES.ONE_HUNDRED;
+                }
+                break;
+            case R.id.twoHundredMeter:
+                if (regCat.equals("200")) {
+                    Toast.makeText(this, "You are already registered for 200m.", Toast.LENGTH_SHORT).show();
+                    RadioButton singleButton = findViewById(R.id.twoHundredMeter);
+                    singleButton.setChecked(false);
+                    category = null;
+                } else {
+                    category = Society.SPORTS_CATEGORIES.TWO_HUNDRED;
+                }
                 break;
 
         }
@@ -160,33 +281,43 @@ public class SportsMeetRegisterationActivity extends AppCompatActivity {
         switch (id) {
             case R.id.radioSingles:
                 //TODO
-                submitButt.setAlpha(0);
-                partnerDetailsLayout.setVisibility(View.GONE);
-                submitButt.animate().alpha(1).setDuration(500);
-                category = Society.SPORTS_CATEGORIES.SINGLES;
+                if (!regCat.equals("Singles")) {
+                    submitButt.setAlpha(0);
+                    partnerDetailsLayout.setVisibility(View.GONE);
+                    submitButt.animate().alpha(1).setDuration(500);
+                    category = Society.SPORTS_CATEGORIES.SINGLES;
+                } else {
+                    Toast.makeText(this, "You are already registered for singles.", Toast.LENGTH_SHORT).show();
+                    RadioButton singleButton = findViewById(R.id.radioSingles);
+                    singleButton.setChecked(false);
+                    category = null;
+                }
                 break;
             case R.id.radioDoubles:
-                submitButt.setAlpha(0);
-                partnerDetailsLayout.setTranslationX(-1000);
-                partnerDetailsLayout.setVisibility(View.VISIBLE);
-                partnerDetailsLayout.animate().translationXBy(1000).setDuration(500);
-                submitButt.animate().alpha(1).setDuration(500);
-                category = Society.SPORTS_CATEGORIES.DOUBLES;
+                if (!regCat.equals("Doubles")) {
+                    submitButt.setAlpha(0);
+                    partnerDetailsLayout.setTranslationX(-1000);
+                    partnerDetailsLayout.setVisibility(View.VISIBLE);
+                    partnerDetailsLayout.animate().translationXBy(1000).setDuration(500);
+                    submitButt.animate().alpha(1).setDuration(500);
+                    category = Society.SPORTS_CATEGORIES.DOUBLES;
+                } else {
+                    Toast.makeText(this, "You are already registered for doubles", Toast.LENGTH_SHORT).show();
+                    RadioButton singleButton = findViewById(R.id.radioDoubles);
+                    singleButton.setChecked(false);
+                    category = null;
+                }
                 break;
         }
     }
 
     public void attemptRegister(View view) {
-        ProgressDialog firstDialog = new ProgressDialog(SportsMeetRegisterationActivity.this, R.style.ProgressDialogTheme);
+//        ProgressDialog firstDialog = new ProgressDialog(SportsMeetRegisterationActivity.this, R.style.ProgressDialogTheme);
 
-        firstDialog.setTitle("Loading");
-        firstDialog.setMessage("Downloading content, please wait...");
-        firstDialog.setCanceledOnTouchOutside(false);
-        firstDialog.setCancelable(false);
         firstDialog.show();
-        if (society.getName().equals("Cricket")) {
-            SportsForm form = new SportsForm(Society.SPORTS_GENDERS.MALE,
-                    Society.SPORTS_CATEGORIES.TEAM_MEMBER,
+        if (society.getName().equals("Throw ball")) {
+            SportsForm form = new SportsForm(Society.SPORTS_GENDERS.FEMALE,
+                    Society.SPORTS.G,
                     "null",
                     "null");
             firebaseDb.child(FirebaseModel.SPORTS_MEET.SPORTS_MEET_TABLE)
@@ -225,6 +356,80 @@ public class SportsMeetRegisterationActivity extends AppCompatActivity {
                 Toast.makeText(this, "Registration has been successful", Toast.LENGTH_SHORT).show();
                 finish();
             }
+        } else if (society.getCategory().equals(Society.SPORTS.BdistGdist)) {
+            if (category == null || gender == null) {
+                Toast.makeText(this, "All details are required", Toast.LENGTH_SHORT).show();
+            } else if (category.equals(Society.SPORTS_CATEGORIES.ONE_HUNDRED)){
+                if (regCat.equals("null")) {
+                    SportsForm form = new SportsForm(gender,
+                            category,
+                            "null",
+                            "null");
+                    firebaseDb.child(FirebaseModel.SPORTS_MEET.SPORTS_MEET_TABLE)
+                            .child(FirebaseModel.SPORTS_MEET.EVENTS)
+                            .child(FirebaseModel.SPORTS_MEET.REGISTRATIONS)
+                            .child(society.getName())
+                            .child(email.substring(0, email.indexOf('.')))
+                            .setValue(form);
+                    invalidEvents.add(society.getName() + "100");
+                    firebaseDb.child(FirebaseModel.Users.USERS)
+                            .child(email.substring(0, email.indexOf('.')))
+                            .child(FirebaseModel.Users.EVENTS_REGISTERED)
+                            .setValue(invalidEvents);
+                    Toast.makeText(this, "Registration has been successful", Toast.LENGTH_SHORT).show();
+                    finish();
+                } else {
+                    firebaseDb.child(FirebaseModel.SPORTS_MEET.SPORTS_MEET_TABLE)
+                            .child(FirebaseModel.SPORTS_MEET.EVENTS)
+                            .child(FirebaseModel.SPORTS_MEET.REGISTRATIONS)
+                            .child(society.getName())
+                            .child(email.substring(0, email.indexOf('.')))
+                            .child("category")
+                            .setValue("100200");
+                    invalidEvents.add(society.getName() + "100200");
+                    firebaseDb.child(FirebaseModel.Users.USERS)
+                            .child(email.substring(0, email.indexOf('.')))
+                            .child(FirebaseModel.Users.EVENTS_REGISTERED)
+                            .setValue(invalidEvents);
+                    Toast.makeText(this, "Registration has been successful", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+            } else {
+                if (regCat.equals("null")) {
+                    SportsForm form = new SportsForm(gender,
+                            category,
+                            "null",
+                            "null");
+                    firebaseDb.child(FirebaseModel.SPORTS_MEET.SPORTS_MEET_TABLE)
+                            .child(FirebaseModel.SPORTS_MEET.EVENTS)
+                            .child(FirebaseModel.SPORTS_MEET.REGISTRATIONS)
+                            .child(society.getName())
+                            .child(email.substring(0, email.indexOf('.')))
+                            .setValue(form);
+                    invalidEvents.add(society.getName() + "200");
+                    firebaseDb.child(FirebaseModel.Users.USERS)
+                            .child(email.substring(0, email.indexOf('.')))
+                            .child(FirebaseModel.Users.EVENTS_REGISTERED)
+                            .setValue(invalidEvents);
+                    Toast.makeText(this, "Registration has been successful", Toast.LENGTH_SHORT).show();
+                    finish();
+                } else {
+                    firebaseDb.child(FirebaseModel.SPORTS_MEET.SPORTS_MEET_TABLE)
+                            .child(FirebaseModel.SPORTS_MEET.EVENTS)
+                            .child(FirebaseModel.SPORTS_MEET.REGISTRATIONS)
+                            .child(society.getName())
+                            .child(email.substring(0, email.indexOf('.')))
+                            .child("category")
+                            .setValue("100200");
+                    invalidEvents.add(society.getName() + "100200");
+                    firebaseDb.child(FirebaseModel.Users.USERS)
+                            .child(email.substring(0, email.indexOf('.')))
+                            .child(FirebaseModel.Users.EVENTS_REGISTERED)
+                            .setValue(invalidEvents);
+                    Toast.makeText(this, "Registration has been successful", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+            }
         } else if (society.getCategory().equals(Society.SPORTS.BGSD)) {
             if (category == null || gender == null) {
                 Toast.makeText(this, "All details are required", Toast.LENGTH_SHORT).show();
@@ -234,17 +439,69 @@ public class SportsMeetRegisterationActivity extends AppCompatActivity {
                 if (partnerNameTxt.isEmpty() || partnerEnrollmentText.isEmpty()) {
                     Toast.makeText(this, "All details are required", Toast.LENGTH_SHORT).show();
                 } else {
+                    if (regCat.equals("null")) {
+                        SportsForm form = new SportsForm(gender,
+                                category,
+                                partnerNameTxt,
+                                partnerEnrollmentText);
+                        firebaseDb.child(FirebaseModel.SPORTS_MEET.SPORTS_MEET_TABLE)
+                                .child(FirebaseModel.SPORTS_MEET.EVENTS)
+                                .child(FirebaseModel.SPORTS_MEET.REGISTRATIONS)
+                                .child(society.getName())
+                                .child(email.substring(0, email.indexOf('.')))
+                                .setValue(form);
+                        invalidEvents.add(society.getName() + "D");
+                        firebaseDb.child(FirebaseModel.Users.USERS)
+                                .child(email.substring(0, email.indexOf('.')))
+                                .child(FirebaseModel.Users.EVENTS_REGISTERED)
+                                .setValue(invalidEvents);
+                        Toast.makeText(this, "Registration has been successful", Toast.LENGTH_SHORT).show();
+                        finish();
+                    } else {
+                        firebaseDb.child(FirebaseModel.SPORTS_MEET.SPORTS_MEET_TABLE)
+                                .child(FirebaseModel.SPORTS_MEET.EVENTS)
+                                .child(FirebaseModel.SPORTS_MEET.REGISTRATIONS)
+                                .child(society.getName())
+                                .child(email.substring(0, email.indexOf('.')))
+                                .child("category")
+                                .setValue("SD");
+                        invalidEvents.add(society.getName() + "SD");
+                        firebaseDb.child(FirebaseModel.Users.USERS)
+                                .child(email.substring(0, email.indexOf('.')))
+                                .child(FirebaseModel.Users.EVENTS_REGISTERED)
+                                .setValue(invalidEvents);
+                        Toast.makeText(this, "Registration has been successful", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                }
+            } else {
+                if (regCat.equals("null")) {
                     SportsForm form = new SportsForm(gender,
                             category,
-                            partnerNameTxt,
-                            partnerEnrollmentText);
+                            "null",
+                            "null");
                     firebaseDb.child(FirebaseModel.SPORTS_MEET.SPORTS_MEET_TABLE)
                             .child(FirebaseModel.SPORTS_MEET.EVENTS)
                             .child(FirebaseModel.SPORTS_MEET.REGISTRATIONS)
                             .child(society.getName())
                             .child(email.substring(0, email.indexOf('.')))
                             .setValue(form);
-                    invalidEvents.add(society.getName());
+                    invalidEvents.add(society.getName() + "S");
+                    firebaseDb.child(FirebaseModel.Users.USERS)
+                            .child(email.substring(0, email.indexOf('.')))
+                            .child(FirebaseModel.Users.EVENTS_REGISTERED)
+                            .setValue(invalidEvents);
+                    Toast.makeText(this, "Registration has been successful", Toast.LENGTH_SHORT).show();
+                    finish();
+                } else {
+                    firebaseDb.child(FirebaseModel.SPORTS_MEET.SPORTS_MEET_TABLE)
+                            .child(FirebaseModel.SPORTS_MEET.EVENTS)
+                            .child(FirebaseModel.SPORTS_MEET.REGISTRATIONS)
+                            .child(society.getName())
+                            .child(email.substring(0, email.indexOf('.')))
+                            .child("category")
+                            .setValue("SD");
+                    invalidEvents.add(society.getName() + "SD");
                     firebaseDb.child(FirebaseModel.Users.USERS)
                             .child(email.substring(0, email.indexOf('.')))
                             .child(FirebaseModel.Users.EVENTS_REGISTERED)
@@ -252,24 +509,6 @@ public class SportsMeetRegisterationActivity extends AppCompatActivity {
                     Toast.makeText(this, "Registration has been successful", Toast.LENGTH_SHORT).show();
                     finish();
                 }
-            } else {
-                SportsForm form = new SportsForm(gender,
-                        category,
-                        "null",
-                        "null");
-                firebaseDb.child(FirebaseModel.SPORTS_MEET.SPORTS_MEET_TABLE)
-                        .child(FirebaseModel.SPORTS_MEET.EVENTS)
-                        .child(FirebaseModel.SPORTS_MEET.REGISTRATIONS)
-                        .child(society.getName())
-                        .child(email.substring(0, email.indexOf('.')))
-                        .setValue(form);
-                invalidEvents.add(society.getName());
-                firebaseDb.child(FirebaseModel.Users.USERS)
-                        .child(email.substring(0, email.indexOf('.')))
-                        .child(FirebaseModel.Users.EVENTS_REGISTERED)
-                        .setValue(invalidEvents);
-                Toast.makeText(this, "Registration has been successful", Toast.LENGTH_SHORT).show();
-                finish();
             }
         } else {
             if (gender == null) {
@@ -298,24 +537,7 @@ public class SportsMeetRegisterationActivity extends AppCompatActivity {
 
     }
 
-    public ArrayList<String> removeDuplicates(ArrayList<String> x) {
-        HashMap<String, Integer> duplicateRemoval = new HashMap<>();
-        for (String y: x) {
-            duplicateRemoval.put(y, 0);
-        }
-        ArrayList<String> z = new ArrayList<>();
-        Log.d("Bpit", "duprem " + duplicateRemoval.keySet().toString());
-        for (String y: duplicateRemoval.keySet()) {
-            if (y != null && !y.equals("-1")) {
-                Log.d("Bpit", "kjdsnsa");
-                z.add(y);
-            }
-        }
-        z.add(0, "-1");
-        Log.d("Bpit", x.toString());
-        Log.d("Bpit", z.toString());
-        return z;
-    }
+
 
     public void clearUI() {
         categoryLayout.setVisibility(View.GONE);
@@ -324,6 +546,7 @@ public class SportsMeetRegisterationActivity extends AppCompatActivity {
         femaleWeightLayout.setVisibility(View.GONE);
         genderLayout.setVisibility(View.GONE);
         partnerDetailsLayout.setVisibility(View.GONE);
+        distanceLayout.setVisibility(View.GONE);
     }
 
     @Override

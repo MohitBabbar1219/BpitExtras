@@ -106,9 +106,12 @@ public class ScheduleFragment extends Fragment {
                 titles.add("Long jump");
                 contents.add(bg(longJumpBoys, longJumpGirls));
 
-                String cricket = schedule.child("Cricket").child("Boys").getValue(String.class);
-                titles.add("Cricket");
-                contents.add(cricketStr(cricket));
+                String boys100m = schedule.child("Athletics").child("Boys").child("100m").getValue(String.class);
+                String girls100m = schedule.child("Athletics").child("Girls").child("100m").getValue(String.class);
+                String boys200m = schedule.child("Athletics").child("Boys").child("200m").getValue(String.class);
+                String girls200m = schedule.child("Athletics").child("Girls").child("200m").getValue(String.class);
+                titles.add("Athletics");
+                contents.add(athleticsStr(boys100m, boys200m, girls100m, girls200m));
 
                 String badBoysSing = schedule.child("Badminton").child("Boys").child("Singles").getValue(String.class);
                 String badBoysDoubles = schedule.child("Badminton").child("Boys").child("Doubles").getValue(String.class);
@@ -153,6 +156,9 @@ public class ScheduleFragment extends Fragment {
     }
     public String cricketStr(String boys){
         return "\tBoys: " + boys;
+    }
+    public String athleticsStr(String boys100, String boys200, String girls100, String girls200) {
+        return "\tBoys:\n\t\t100m: " + boys100 + "\n\t\t200m: " + boys200 + "\n\tGirls:\n\t\t100m: " + girls100 + "\n\t\t200m: " + girls200;
     }
     public String bgsd(String bs, String bd, String gs, String gd) {
        return "\tBoys:\n\t\tSingles: " + bs + "\n\t\tDoubles: " + bd + "\n\tGirls:\n\t\tSingles: " + gs + "\n\t\tDoubles: " + gd;

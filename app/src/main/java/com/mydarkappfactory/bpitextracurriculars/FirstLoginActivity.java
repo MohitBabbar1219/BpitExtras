@@ -1,5 +1,6 @@
 package com.mydarkappfactory.bpitextracurriculars;
 
+import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
@@ -31,6 +32,7 @@ public class FirstLoginActivity extends AppCompatActivity {
     String mobileNum, email, password, emailAddress;
     DatabaseReference firebaseDb;
     SQLiteDatabase db;
+    ProgressDialog firstDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +57,32 @@ public class FirstLoginActivity extends AppCompatActivity {
         mobileNumEdt = findViewById(R.id.mobile_edttxt);
 
         firebaseDb = FirebaseDatabase.getInstance().getReference();
+
+        firstDialog = new ProgressDialog(FirstLoginActivity.this, R.style.ProgressDialogTheme);
+
+        firstDialog.setTitle("Loading");
+        firstDialog.setMessage("Downloading content, please wait...");
+        firstDialog.setCanceledOnTouchOutside(false);
+        firstDialog.setCancelable(false);
+        firstDialog.show();
+
+        firebaseDb.child(FirebaseModel.Users.USERS)
+                .child(email.substring(0, email.indexOf('.')))
+                .child("emailAddress").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String firebaseFetchedEmail = dataSnapshot.getValue(String.class);
+                if (!firebaseFetchedEmail.equals("abc@xyz.com")) {
+                    emailEdt.setText(dataSnapshot.getValue(String.class));
+                }
+                firstDialog.cancel();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
 
     }

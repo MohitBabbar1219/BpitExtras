@@ -10,8 +10,9 @@ public class Society {
     public static String NO_CATEGORY = "NO_CATEGORY";
     public static class SPORTS {
         public static String BG = "BG";
-        public static String B = "B";
+        public static String G = "G";
         public static String BGSD = "BGSD";
+        public static String BdistGdist = "BdistGdist";
         public static String BwtGwt = "BwtGwt";
     }
     public static class SPORTS_CATEGORIES {
@@ -22,6 +23,8 @@ public class Society {
                 , SEVENTYFIVE_PLUS = "75+KG"
                 , SIXTY_MINUS = "60-KG"
                 , SIXTY_PLUS = "60+KG"
+                , ONE_HUNDRED = "100m"
+                , TWO_HUNDRED = "200m"
                 , TEAM_MEMBER = "Team Member";
     }
     public static class SPORTS_GENDERS {

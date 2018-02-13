@@ -51,28 +51,33 @@ public class MenuActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
+                SQLiteOpenHelper dbHelper = new DBHelper(MenuActivity.this);
+                db = dbHelper.getWritableDatabase();
+
+                Cursor cursor = db.query("IS_LOGGED_IN", new String[]{"ANSWER"},
+                        "_id = 1", null, null, null, null);
+                cursor.moveToFirst();
+
+                int answer = cursor.getInt(0);
+
+                Log.d("Bpit", "" + answer);
+
+                cursor.close();
+                Intent intent;
                 switch (id) {
-                    case R.id.home_id:
+                    case R.id.notice_id:
                         //TODO
+                        intent = new Intent(MenuActivity.this, NoticeActivity.class);
+                        startActivity(intent);
                         break;
                     case R.id.event_id:
                         //TODO
+                        intent = new Intent(MenuActivity.this, EventsActivity.class);
+                        startActivity(intent);
                         break;
                     case R.id.sportsroom_id:
                         //TODO
-                        SQLiteOpenHelper dbHelper = new DBHelper(MenuActivity.this);
-                        db = dbHelper.getWritableDatabase();
 
-                        Cursor cursor = db.query("IS_LOGGED_IN", new String[]{"ANSWER"},
-                                "_id = 1", null, null, null, null);
-                        cursor.moveToFirst();
-
-                        int answer = cursor.getInt(0);
-
-                        Log.d("Bpit", "" + answer);
-
-                        cursor.close();
-                        Intent intent;
                         if (answer == -1) {
                             intent = new Intent(MenuActivity.this, LoginActivity.class);
                         } else if (answer == 0) {
@@ -84,14 +89,19 @@ public class MenuActivity extends AppCompatActivity {
 //                        Intent intent = new Intent(MenuActivity.this, EquipmentsActivity.class);
                         startActivity(intent);
                         break;
-                    case R.id.signout_id:
+                    case R.id.accountSettings:
                         //TODO
-                        break;
-                    case R.id.signin_id:
-                        //TODO
-                        Intent intent1 = new Intent(MenuActivity.this, LoginActivity.class);
-                        startActivity(intent1);
-                        finish();
+
+                        if (answer == -1) {
+                            intent = new Intent(MenuActivity.this, LoginActivity.class);
+                        } else if (answer == 0) {
+                            intent = new Intent(MenuActivity.this, FirstLoginActivity.class);
+                        } else {
+                            intent = new Intent(MenuActivity.this, AccountSettingsActivity.class);
+                            intent.putExtra("CategoryIndex", 2);
+                        }
+//                        Intent intent = new Intent(MenuActivity.this, EquipmentsActivity.class);
+                        startActivity(intent);
                         break;
                 }
                 return true;

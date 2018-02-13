@@ -22,14 +22,24 @@
         android:padding="15dp"
         android:background="@color/colorPrimary">
 
+
+        <TextView
+            android:textColor="@color/textColor"
+            android:layout_marginStart="20dp"
+            android:id="@+id/oirwiuods"
+            android:textSize="18sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Coordinators: "/>
+
         <TextView
             android:textColor="@color/textColor"
             android:layout_marginStart="20dp"
             android:id="@+id/coordinators"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:text="Coordinators: John Doe(9999847756)\n                         Jane Doe(9999736645)"/>
+            android:layout_below="@id/oirwiuods"
+            android:text="John Doe: 9999847756\nJane Doe: 9999736645"/>
 
     </RelativeLayout>
 
@@ -44,18 +54,18 @@
             android:padding="20dp">
 
             <TextView
-                android:id="@+id/cricketMessage"
+                android:id="@+id/throwBallMessage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:text="Only boys can participate in cricket. Click submit to register for Cricket team of your stream..."
+                android:text="Only girls can participate in Throw ball. Click submit to register..."
                 android:textColor="@color/textColor"
                 android:textSize="24sp" />
 
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:id="@+id/genderLayout"
-                android:layout_below="@id/cricketMessage"
+                android:layout_below="@id/throwBallMessage"
                 android:layout_height="wrap_content">
 
                 <TextView
@@ -271,6 +281,50 @@
 
             </RelativeLayout>
 
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:id="@+id/distanceLayout"
+                android:layout_below="@id/partnerDetails"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Distance:"
+                    android:id="@+id/kjadsnlakjcsa"
+                    android:textColor="@color/textColor"
+                    android:textSize="24sp"/>
+
+                <RadioGroup
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_below="@id/kjadsnlakjcsa"
+                    android:id="@+id/distanceGroup">
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="100m"
+                        android:onClick="setDistance"
+                        android:id="@+id/hundredMeter"
+                        android:textColor="@color/textColor"
+                        android:textSize="20sp"/>
+
+                    <RadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="200m"
+                        android:onClick="setDistance"
+                        android:id="@+id/twoHundredMeter"
+                        android:textColor="@color/textColor"
+                        android:textSize="20sp"/>
+
+
+                </RadioGroup>
+
+            </RelativeLayout>
+
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -279,7 +333,7 @@
                 android:text="Submit"
                 android:onClick="attemptRegister"
                 android:id="@+id/sportsRegFormSubmitButton"
-                android:layout_below="@id/partnerDetails"
+                android:layout_below="@id/distanceLayout"
                 android:background="@color/logoColor"
                 android:layout_marginTop="10dp"
                 />

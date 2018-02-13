@@ -24,7 +24,11 @@
         <activity android:name=".SportsMeetRegisterationActivity" />
         <activity android:name=".SocietyFormActivity" />
         <activity android:name=".EquipmentsActivity" />
-        <activity android:name=".FirstLoginActivity"></activity>
+        <activity android:name=".FirstLoginActivity" />
+        <activity android:name=".AccountSettingsActivity" />
+        <activity android:name=".ChangePasswordActivity" />
+        <activity android:name=".NoticeActivity" />
+        <activity android:name=".EventsActivity"></activity>
     </application>
 
 </manifest>
